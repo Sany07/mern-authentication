@@ -1,14 +1,18 @@
 const mongoose = require("mongoose");
 const bcrypt = require('bcrypt');
+var validator = require('validator');
 
 const UserSchema = mongoose.Schema({
     firstName:{
         type: String,
         trim: true,
+        maxLength: [8, 'Your firstname cannot exceed 8 characters']
     },
     lastName:{
         type: String,
         trim: true,
+        maxLength: [8, 'Your lastname cannot exceed 8 characters']
+
     },
     userName:{
         type: String,
@@ -19,6 +23,7 @@ const UserSchema = mongoose.Schema({
     email:{
         type: String,
         required: [true, 'Please a valid email'],
+        validate: [validator.isEmail, 'Please enter valid email address'],
         unique: true,
         trim: true
     },
@@ -26,7 +31,6 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: [true, 'Please enter your password'],
         minLength: [6, 'Your password must be longer than 6 characters'],
-        select: false
     }
 },
     {

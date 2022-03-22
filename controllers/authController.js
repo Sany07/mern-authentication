@@ -1,37 +1,35 @@
 const User = require('../models/userModel')
 const asyncHandler = require('express-async-handler')
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt');
+const generateJwtToken = require('../utils/generateJwtToken')
 
 // @desc Login Controller
 const loginUser = asyncHandler(async(req, res)=>{
     const {email, password} = req.body
 
-    // if (!email || password) {
-    //     throw new Error('Please add all fields',res.statusCode=400)
-    // }
+    if (!email || password) {
+        throw new Error('Please add all fields',res.statusCode=400)
+    }
 
     const user = await User.findOne({email}).select("+password");
     
     if(!user){
-        throw new Error('Invalid Credentials',res.status=400)
+        throw new Error('Invalid Credentials',res.status=404)
     }
     console.log(password, user.password);
     const isMach = await user.comparePassword(password)
+    
     if (!isMach) {
         console.log(isMach);
         throw new Error('Invalid Credentials',res.status=400)
     }
-
-    res.status(200)
-    res.json({     
+    res.status(200).json({     
          _id: user.id,
         name: user.name,
         email: user.email,
     })
-
 })
 
+// @desc Register Controller
 const registerUser = asyncHandler(async(req, res)=>{
     
     const { userName, email, password} = req.body
@@ -55,26 +53,20 @@ const registerUser = asyncHandler(async(req, res)=>{
         password
     })
     
-    if (user) {
+    if(user) {
         res.status(201).json({
-          _id: user.id,
-          name: user.userName,
-          email: user.email,
-          token: generateToken(user._id),
+        message: 'Account Registered successfully',
+        _id: user.id,
+        name: user.userName,
+        email: user.email,
+        token: generateJwtToken(user._id),
         })
-      } else {
+    }else {
         
         throw new Error('Registration Failed',res.status(400))
-      }
+    }
     
 })
-
-// Generate JWT
-    const generateToken = (id) => {
-        return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: '30d',
-        })
-    }
 
 
 module.exports ={
