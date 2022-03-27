@@ -6,7 +6,7 @@ const generateJwtToken = require('../utils/generateJwtToken')
 const loginUser = asyncHandler(async(req, res)=>{
     const {email, password} = req.body
 
-    if (!email || password) {
+    if (!email || !password) {
         throw new Error('Please add all fields',res.statusCode=400)
     }
 
@@ -15,7 +15,6 @@ const loginUser = asyncHandler(async(req, res)=>{
     if(!user){
         throw new Error('Invalid Credentials',res.status=404)
     }
-    console.log(password, user.password);
     const isMach = await user.comparePassword(password)
     
     if (!isMach) {
