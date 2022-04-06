@@ -1,0 +1,10 @@
+{
+    "files.autoSave": "onWindowChange",
+    "editor.fontSize": 15,
+    "editor.wordWrap": "on",
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[javascript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+}
