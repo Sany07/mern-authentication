@@ -7,19 +7,19 @@ const loginUser = asyncHandler(async(req, res)=>{
     const {email, password} = req.body
 
     if (!email || !password) {
-        throw new Error('Please add all fields',res.statusCode=400)
+        throw new Error('Please add all fields', res.status(400))
     }
 
     const user = await User.findOne({email}).select("+password");
     
     if(!user){
-        throw new Error('Invalid Credentials',res.status=404)
+        throw new Error('Invalid Credentials',res.status(404))
     }
     const isMach = await user.comparePassword(password)
     
     if (!isMach) {
         console.log(isMach);
-        throw new Error('Invalid Credentials',res.status=400)
+        throw new Error('Invalid Credentials',res.status(404))
     }
     res.status(200).json({     
          _id: user.id,
