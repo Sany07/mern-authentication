@@ -23,8 +23,9 @@ const loginUser = asyncHandler(async(req, res)=>{
     }
     res.status(200).json({     
          _id: user.id,
-        name: user.name,
+        name: user.userName,
         email: user.email,
+        token: generateJwtToken(user._id)
     })
 })
 
@@ -32,7 +33,6 @@ const loginUser = asyncHandler(async(req, res)=>{
 const registerUser = asyncHandler(async(req, res)=>{
     
     const { userName, email, password} = req.body
-
     if (!userName || !email || !password) {
         throw new Error('Please add all fields', res.status(400))
     }
